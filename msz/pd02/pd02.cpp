@@ -1,15 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-
+#include <cstdio>
 #include <cstdlib>
+#include <ctime>
 #include <vector>
 
-typedef std::vector<float> edges;
 struct graph {
     int N;
     int m;
-    std::vector<edges> nodes;
+    std::vector<std::vector<float>> nodes;
 };
 
 void pref_attach(graph* ba, int t, float E) {
@@ -32,16 +29,21 @@ void pref_attach(graph* ba, int t, float E) {
     }
 }
 
-void random_attach(graph* ba, int t, float E) {
+void rand_attach(graph* ba, int t, float E) {
     for (int i = 0; i < ba->m; ++i) {
-        int node = rand() % t / RAND_MAX;
+        int node = rand() % t;
         ba->nodes[t].push_back(node);
         ba->nodes[node].push_back(t);
     }
 }
 
 int main(int argc, char** argv) {
-    srand(time(NULL));
+    if (argc != 4) {
+        printf("Usage: %s [p|r] N m\n", argv[0]);
+        return 1;
+    }
+
+    srand(time(nullptr));
 
     char* attachment = argv[1];
     int N = atoi(argv[2]);
@@ -50,12 +52,8 @@ int main(int argc, char** argv) {
     graph ba = {
         .N = N,
         .m = m,
-        .nodes = std::vector<edges>(N),
+        .nodes = std::vector<std::vector<float>>(N),
     };
-
-    for (int i = 0; i < ba.N; ++i) {
-        ba.nodes[i] = edges();
-    }
 
     for (int i = 0; i < ba.m; ++i) {
         for (int j = 0; j < i; ++j) {
@@ -73,21 +71,22 @@ int main(int argc, char** argv) {
                 pref_attach(&ba, t, E);
                 break;
             case 'r':
-                random_attach(&ba, t, E);
+                rand_attach(&ba, t, E);
                 break;
             default:
-                break;
+                printf("Invalid attachment type\n");
+                return 1;
         }
     }
 
-    for (edges from : ba.nodes) {
+    for (const auto& from : ba.nodes) {
         for (int to : from) {
             fprintf(stderr, "%d ", to);
         }
         fprintf(stderr, "\n");
     }
 
-    for (edges from : ba.nodes) {
+    for (const auto& from : ba.nodes) {
         printf("%zu\n", from.size());
     }
 
