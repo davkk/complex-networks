@@ -12,7 +12,7 @@ files = [
     output_dir / "r" / "N=100_m=1.err",
     output_dir / "r" / "N=100_m=2.err",
 ]
-attach = dict(r="Random Attachment", p="Preferential Attachment")
+attach = dict(r="random attach.", p="preferential attach.")
 
 set_plot_style()
 
