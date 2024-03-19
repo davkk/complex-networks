@@ -13,6 +13,7 @@ jupyter = "^1.0.0"
 jupytext = "^1.16.1"
 jupyter-collaboration = "^2.0.3"
 nbconvert = "^7.16.2"
+networkx = "^3.2.1"
 
 
 [build-system]
