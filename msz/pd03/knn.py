@@ -56,7 +56,7 @@ for idx, file in enumerate(files[:2]):
     # ax.set_xscale("log")
     # ax.set_yscale("log")
     if idx == 0:
-        ax.set_ylabel(r"$\left<{k_{nn}}\right>(k)$")
+        ax.set_ylabel(r"$\left<{k}\right>(k)$")
 
 for idx, file in enumerate(files[2:]):
     ax = rand[idx]
@@ -79,7 +79,7 @@ for idx, file in enumerate(files[2:]):
     # ax.set_yscale("log")
     ax.set_xlabel("$k$")
     if idx == 0:
-        ax.set_ylabel(r"$\left<{k_{nn}}\right>(k)$")
+        ax.set_ylabel(r"$\left<{k}\right>(k)$")
 
 for idx, file in enumerate(files):
     ax = axs[idx // 2, idx % 2]
@@ -87,7 +87,7 @@ for idx, file in enumerate(files):
 
     ax.set_title(f"{attach[file.parent.name]}, ${N=}$, ${m=}$")
 
-fig.suptitle("Average nearest neighbor degree")
+fig.suptitle("Average degree distribution")
 fig.tight_layout()
-plt.savefig(Path(__file__).with_suffix(".pdf"))
+# plt.savefig(Path(__file__).with_suffix(".pdf"))
 plt.show()
