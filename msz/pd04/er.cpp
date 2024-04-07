@@ -3,7 +3,6 @@
 #include <cstdlib>
 #include <ctime>
 #include <numeric>
-#include <string>
 #include <vector>
 
 typedef std::vector<int> nodes;
@@ -68,6 +67,7 @@ class ER {
         }
 
         float exp_theta = std::exp(-std::log(this->p / (1 - this->p)));
+        int steps = 1e6;
 
         for (int t = 0; t < 1e6; ++t) {
             int i = rand() % N;
@@ -78,6 +78,18 @@ class ER {
             } else if ((float)rand() / RAND_MAX < exp_theta) {
                 this->e[i][j] = 0;
             }
+
+            if (t % (steps / 50) == 0) {
+                int E = 0;
+                for (int i = 0; i < this->N; ++i) {
+                    for (int j = 0; j < i; ++j) {
+                        if (this->e[i][j] == 1) {
+                            E++;
+                        }
+                    }
+                }
+                fprintf(stderr, "%d %d\n", t, E);
+            }
         }
     }
 };
@@ -86,7 +98,7 @@ int main(int argc, char** argv) {
     srand(time(NULL));
 
     if (argc != 4) {
-        printf("Usage: er <type> <N> <p>\n");
+        printf("Usage: ./a.out <type> <N> <p>\n");
         return 1;
     }
 
