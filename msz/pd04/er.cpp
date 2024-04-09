@@ -67,11 +67,14 @@ class ER {
         }
 
         float exp_theta = std::exp(-std::log(this->p / (1 - this->p)));
-        int steps = 1e6;
+        int steps = 1e7;
 
-        for (int t = 0; t < 1e6; ++t) {
-            int i = rand() % N;
-            int j = rand() % N;
+        for (int t = 0; t < steps; ++t) {
+            int i, j;
+            do {
+                i = rand() % this->N;
+                j = rand() % this->N;
+            } while (i == j);
 
             if (this->e[i][j] == 0) {
                 this->e[i][j] = 1;
@@ -79,13 +82,11 @@ class ER {
                 this->e[i][j] = 0;
             }
 
-            if (t % (steps / 50) == 0) {
+            if (t % (steps / 100) == 0) {
                 int E = 0;
                 for (int i = 0; i < this->N; ++i) {
                     for (int j = 0; j < i; ++j) {
-                        if (this->e[i][j] == 1) {
-                            E++;
-                        }
+                        E += this->e[i][j];
                     }
                 }
                 fprintf(stderr, "%d %d\n", t, E);
