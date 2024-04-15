@@ -8,23 +8,31 @@ from msz import set_plot_style
 output_dir = Path(__file__).parent / "output"
 set_plot_style()
 
-step, E = np.loadtxt(output_dir / "m" / "0.7.err").T
+ps = [0.1, 0.7]
 
-plt.plot(step, E, "o-")
+fig, axs = plt.subplots(2, 1, sharex=True)
 
-plt.annotate(
-    text="pomiar",
-    xy=(step.max(), E.max()),
-    xytext=(-20, -60),
-    textcoords="offset pixels",
-    arrowprops=dict(arrowstyle="->"),
-    horizontalalignment="center",
-    verticalalignment="bottom",
-)
+for p in ps:
+    ax = axs[ps.index(p)]
 
-plt.title("Konstrukcja ER, algorytm Metropolis, $N=1000$, $p=0.7$")
-plt.xlabel("krok MC")
-plt.ylabel("liczba krawędzi")
+    step, E = np.loadtxt(output_dir / "m" / f"{p}.err").T
 
+    ax.plot(step, E, "o-")
+
+    ax.annotate(
+        text="pomiar",
+        xy=(step.max(), E.max()),
+        xytext=(-20, -60),
+        textcoords="offset pixels",
+        arrowprops=dict(arrowstyle="->"),
+        horizontalalignment="center",
+        verticalalignment="bottom",
+    )
+
+    ax.set_title(f"Konstrukcja ER, algorytm Metropolis, $N=1000$, ${p=}$")
+    ax.set_xlabel("krok MC")
+    ax.set_ylabel("liczba krawędzi")
+
+fig.tight_layout()
 plt.savefig(Path(__file__).with_suffix(".pdf"))
 plt.show()

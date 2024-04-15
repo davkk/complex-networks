@@ -66,7 +66,11 @@ class ER {
             this->e[i] = edges;
         }
 
-        float exp_theta = std::exp(-std::log(this->p / (1 - this->p)));
+        int p = this->p > 0.5;
+        float theta = p ? std::log(this->p / (1 - this->p))
+                        : std::log((1 - this->p) / this->p);
+
+        float exp_theta = std::exp(-theta);
         int steps = 1e7;
 
         for (int t = 0; t < steps; ++t) {
@@ -76,10 +80,10 @@ class ER {
                 j = rand() % this->N;
             } while (i == j);
 
-            if (this->e[i][j] == 0) {
-                this->e[i][j] = 1;
+            if (this->e[i][j] == !p) {
+                this->e[i][j] = p;
             } else if ((float)rand() / RAND_MAX < exp_theta) {
-                this->e[i][j] = 0;
+                this->e[i][j] = !p;
             }
 
             if (t % (steps / 100) == 0) {
